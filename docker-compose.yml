@@ -1,0 +1,39 @@
+version: '3'
+services:
+  testlink:
+    build: .
+    ports:
+      - "80:80"
+    links:
+      - db
+    volumes:
+      - ./code:/var/www/html
+      - ./logs:/var/testlink/logs
+    networks:
+      - internal_network
+      - external_network
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7.40
+    # if your mac is not inside intel, you need this line
+    platform: linux/amd64
+    ports:
+      - "33060:3306"
+    volumes:
+      - ./db:/var/lib/mysql
+      - ./code/install/sql/alter_tables/:/var/alter_table
+    networks:
+      - internal_network
+      - external_network
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=testlink
+      - MYSQL_USER=testlink
+      - MYSQL_PASSWORD=password
+
+networks:
+  internal_network:
+    internal: true
+  external_network:

@@ -1,0 +1,91 @@
+--- a/lib/functions/tlUser.class.php
++++ b/lib/functions/tlUser.class.php
+@@ -329,26 +329,22 @@ class tlUser extends tlDBObject
+       $sql .= " AND testproject_id = " . intval($testProjectID);
+     }
+     $allRoles = $db->fetchColumnsIntoMap($sql,'testproject_id','role_id');
+-    $this->tprojectRoles = null;
+-    if (sizeof($allRoles))
+-    {
+-      $roleCache = null;
+-      foreach($allRoles as $tprojectID => $roleID)
+-      {
+-        if (!isset($roleCache[$roleID]))
+-        {
+-          $tprojectRole = tlRole::createObjectFromDB($db,$roleID,"tlRole",true);
+-          $roleCache[$roleID] = $tprojectRole;
++    if (!is_null($allRoles)) {
++        $this->tprojectRoles = null;
++        if (sizeof($allRoles)) {
++            $roleCache = null;
++            foreach ($allRoles as $tprojectID => $roleID) {
++                if (!isset($roleCache[$roleID])) {
++                    $tprojectRole = tlRole::createObjectFromDB($db, $roleID, "tlRole", true);
++                    $roleCache[$roleID] = $tprojectRole;
++                } else {
++                    $tprojectRole = clone($roleCache[$roleID]);
++                }
++                if ($tprojectRole) {
++                    $this->tprojectRoles[$tprojectID] = $tprojectRole;
++                }
++            }
+         }
+-        else
+-        {
+-          $tprojectRole = clone($roleCache[$roleID]);
+-        }
+-        if ($tprojectRole)
+-        {
+-          $this->tprojectRoles[$tprojectID] = $tprojectRole;
+-        }  
+-      }
+     }
+     return tl::OK;
+   }
+@@ -374,25 +370,21 @@ class tlUser extends tlDBObject
+         
+     $allRoles = $db->fetchColumnsIntoMap($sql,'testplan_id','role_id');
+     $this->tplanRoles = null;
+-    if (sizeof($allRoles))
+-    {
+-      $roleCache = null;
+-      foreach($allRoles as $tplanID => $roleID)
+-      {
+-        if (!isset($roleCache[$roleID]))
+-        {
+-          $tplanRole = tlRole::createObjectFromDB($db,$roleID,"tlRole",true);
+-          $roleCache[$roleID] = $tplanRole;
+-        }
+-        else
+-        {
+-          $tplanRole = clone($roleCache[$roleID]);
++    if (!is_null($allRoles)) {
++        if (sizeof($allRoles)) {
++            $roleCache = null;
++            foreach ($allRoles as $tplanID => $roleID) {
++                if (!isset($roleCache[$roleID])) {
++                    $tplanRole = tlRole::createObjectFromDB($db, $roleID, "tlRole", true);
++                    $roleCache[$roleID] = $tplanRole;
++                } else {
++                    $tplanRole = clone($roleCache[$roleID]);
++                }
++                if ($tplanRole) {
++                    $this->tplanRoles[$tplanID] = $tplanRole;
++                }
++            }
+         }
+-        if ($tplanRole)
+-        {
+-          $this->tplanRoles[$tplanID] = $tplanRole;
+-        }  
+-      }
+     }
+     return tl::OK;
+   }
+@@ -1439,4 +1431,4 @@ class tlUser extends tlDBObject
+     return $ret;
+ 
+   }
+-}
+\ No newline at end of file
++}
