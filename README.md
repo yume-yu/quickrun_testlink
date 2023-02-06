@@ -9,6 +9,7 @@
 1. `$ git clone --recursive {this}`
 1. `$ patch -u code/third_party/phpmailer/PHPMailerAutoload.php < PHPMailderAutoload.php.patch`
 1. `$ patch -u code/lib/functions/tlUser.class.php < tlUser.class.php.patch`
+1. `$ patch -u code/lib/api/rest/v1/tlRestApi.class.php < tlRestApi.class.php.patch`
 1. `$ docker-compose build`
 1. `$ docker-compose up -d`
 1. check `docker-compose logs -f`
